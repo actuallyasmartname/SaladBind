@@ -4,7 +4,8 @@
         "etchash": 2700,
         "kawpow": 2900,
         "beamv3": 3000,
-        "EQUI144_5": 2000
+        "EQUI144_5": 2000,
+        "autolykos2": 2080
     },
     "miners": {
         "phoenixminer": {
@@ -31,7 +32,8 @@
             "algos": [
                 "ethash",
                 "etchash",
-                "kawpow"
+                "kawpow",
+                "autolykos2"
             ],
             "supported_gpus": ["nvidia"],
             "supported_os": ["win32", "linux"],
@@ -51,7 +53,8 @@
                 "ethash",
                 "etchash",
                 "kawpow",
-                "beamv3"
+                "beamv3",
+                "autolykos2"
             ],
             "supported_gpus": ["nvidia", "amd"],
             "supported_os": ["win32", "linux"],
