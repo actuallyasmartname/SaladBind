@@ -316,8 +316,9 @@ async function selectPool(minerData, algo) {
 			for (let i = 0; i < poolsy.regions.length; i++) {
 				regionList.push({ name: poolsy.regions[i], value: poolsy.regions[i] });
 			}
-			if(pool.pool == "Nicehash") {
-				const region = await inquirer.prompt({
+			var region
+			if(pool.pool.name == "NiceHash") {
+				region = await inquirer.prompt({
 					type: "list",
 					name: "region",
 					message: "Choose a region",
@@ -327,11 +328,11 @@ async function selectPool(minerData, algo) {
 					}, ...regionList]
 				});
 			} else {
-				const region = await inquirer.prompt({
+				region = await inquirer.prompt({
 					type: "list",
 					name: "region",
 					message: "Choose a region",
-					choices: [regionList]
+					choices: [...regionList]
 				});
 			}
 			if(region.region == "automatic") {
