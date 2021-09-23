@@ -316,7 +316,7 @@ async function selectPool(minerData, algo) {
 			for (let i = 0; i < poolsy.regions.length; i++) {
 				regionList.push({ name: poolsy.regions[i], value: poolsy.regions[i] });
 			}
-			if(pool.pool == "Ethermine") {
+			if(pool.pool == "Nicehash") {
 				const region = await inquirer.prompt({
 					type: "list",
 					name: "region",
