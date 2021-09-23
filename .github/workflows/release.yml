@@ -15,19 +15,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Install node
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v2.4.0
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
       - name: Compile
         run: |
             npm install
-            npm install pkg
             npm run compile
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
-          body: "Installation instructions at [README](https://github.com/VukkyLtd/SaladBind#Installation) (please read them...)"
+          body: "# [INSTALLATION INSTRUCTIONS HERE!!!](https://github.com/VukkyLtd/SaladBind#Installation)"
           token: ${{ secrets.BEEPBOOP_TOKEN }}
           files: |
             bin/saladbind-win.exe

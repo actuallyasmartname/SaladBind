@@ -1,6 +1,7 @@
 # BIND-related files that shouldn't be pushed
 bin/
 data/
+
 # Logs
 logs
 *.log
@@ -77,3 +78,4 @@ typings/
 
 # FuseBox cache
 .fusebox/
+saladbind_error.txt

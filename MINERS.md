@@ -3,8 +3,8 @@
 ## Table of Contents
 
 [Pools](#Pools) <br>
-[Miners](#Miners) <br>
 [Algorithms](#Algorithms) <br>
+[Miners](#Miners) <br>
 [Additional Commands](#Additional-Commands) <br>
 
 ## Pools
@@ -15,13 +15,23 @@ Good if you know you're going to be restarting the miner constantly instead of h
 
 ### Ethermine
 
-Good for longer sessions, earnings can be unstable. Can take up to 30 minutes for earnings to start appearing on Salad.
+Good for longer sessions. Earnings can be unstable. Can take up to 30 minutes for earnings to start appearing on Salad.
+
+## Algorithms
+
+### Recommendations
+
+Over 4GB of VRAM: Ethash
+
+3-4GB of VRAM: KawPow
+
+2GB of VRAM: EQUI144_5 (Bitcoin Gold)
 
 ## Miners
 
 ### PhoenixMiner
 
-PhoenixMiner supports Ethash and Etchash. It has a lower fee than most other miners of 0.65%.
+PhoenixMiner supports Ethash and Etchash. It has a lower fee than most other miners with 0.65%.
 
 Supported OS: Windows, Linux
 
@@ -29,7 +39,7 @@ Supported GPUS: NVIDIA, AMD
 
 ### T-Rex Miner
 
-T-Rex supports Ethash, Etchash and KawPow. It has a fee of 1%.
+T-Rex supports Ethash, Etchash and KawPow. It has a fee of 1%. There is a web interface to manage your machine.
 
 Supported OS: Windows, Linux
 
@@ -43,9 +53,9 @@ Supported OS: Windows, Linux
 
 Supported GPUS: NVIDIA, AMD
 
-### Teamredminer
+### Team Red Miner
 
-Teamredminer supports Ethash, Etchash and KawPow. It has a fee of 1% on Ethash and Etchash, and 2% on KawPow.
+Team Red Miner supports Ethash, Etchash and KawPow. It has a fee of 1% on Ethash and Etchash, and 2% on KawPow.
 
 Supported OS: Windows, Linux
 
@@ -67,17 +77,7 @@ Supported OS: Windows, Linux
 
 Supported GPUS: NVIDIA, AMD
 
-## Algorithms
-
-### Recommendations
-
-Over 4GB of VRAM: Ethash
-
-3-4GB of VRAM: KawPow
-
-2GB of VRAM: EQUI144_5 (Bitcoin Gold)
-
 ## Additional Commands
 
-To use additional commands select Set Additional Commands before starting the miner, these arguments are passed directly to the miner.
-If you do not specify a wallet, pool or algorithm, the default will be used.
+To use additional commands select `Set Additional Commands` before starting the miner. These arguments are passed directly to the miner.
+If you do not specify a wallet, pool, or algorithm, the default will be used.
