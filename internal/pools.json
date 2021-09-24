@@ -49,6 +49,9 @@
             "etchash": {
                 "host": "stratum+tcp://REGIONprohashing.com:3357"
             },
+            "EQUI144_5": {
+                "host": "stratum+tcp://REGIONprohashing.com:3345"
+            },
             "randomx": {
                 "host": "stratum+tcp://REGIONprohashing.com:3359"
             }

@@ -136,7 +136,7 @@ In order for this to work, you'll need to have the Discord desktop app installed
 					}, 3500);
 					return;
 				}
-				id = ""
+				id = "" // I dont think this is needed but its here for my sanity.
 			});
 		}
 

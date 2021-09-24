@@ -135,6 +135,9 @@
                 "linux": "https://github.com/Lolliedieb/lolMiner-releases/releases/download/1.32/lolMiner_v1.32a_Lin64.tar.gz"
             },
             "algos": [
+                "ethash",
+                "etchash",
+                "beamv3",
                 "EQUI144_5"
             ],
             "supported_gpus": [
