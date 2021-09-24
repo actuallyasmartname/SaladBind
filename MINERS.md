@@ -66,13 +66,6 @@ Supported OS: Windows, Linux
 
 Supported GPUS: AMD
 
-### Ethminer
-
-Ethminer supports Ethash. It has no fee.
-
-Supported OS: Windows, Linux, MacOS
-
-Supported GPUS: NVIDIA, AMD
 
 ### lolMiner
 
