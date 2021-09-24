@@ -571,14 +571,26 @@ async function startMiner(minerData, algo, pool, region, advancedCommands) {
 			if(algo == "ethash") {
 				defaultArgs.wallet = `-wal ${wallet}`
 				defaultArgs.algo = `-coin eth`
-				defaultArgs.pass = ``
+				defaultArgs.pass = `-pass o=${config.id},n=${config.id}`
 				defaultArgs.pool = `${minerData.parameters.pool} ${pool.algos[algo].host.replace("REGION", region)}${minerData.miner == "PhoenixMiner" && hasAMD ? " -clKernel 0 " : ""}${minerData.miner == "lolMiner" ? " --pers BgoldPoW " : ""}`
 			} else if(algo == "etchash") {
-				defaultArgs.wallet = `-wal ${wallet}.${config.minerId}`
+				defaultArgs.wallet = `-wal ${wallet}`
 				defaultArgs.algo = `-coin etc`
+				defaultArgs.pass = `o=${config.id},n=${config.id}`
 				defaultArgs.pool = `${minerData.parameters.pool} ${pool.algos[algo].host.replace("REGION", region)}${minerData.miner == "PhoenixMiner" && hasAMD ? " -clKernel 0 " : ""}${minerData.miner == "lolMiner" ? " --pers BgoldPoW " : ""}`
 			}
+		} else {
+			defaultArgs.wallet = `${minerData.parameters.wallet} ${wallet}`
+			if (minerData.parameters.algo != "") {
+				defaultArgs.algo = `${minerData.parameters.algo} ${minerData.miner == "lolMiner" ? algo == "beamv3" ? "BEAM-III" : algo.toUpperCase() : algo}`
+			} else {
+				defaultArgs.algo = ""
+			}
+			defaultArgs.pool = `${minerData.parameters.pool} ${pool.algos[algo].host.replace("REGION", region)}${minerData.miner == "lolMiner" && algo == "EQUI144_5" ? " --pers BgoldPoW " : ""}${minerData.miner == "xmrig" && algo == "kawpow" ? " --no-cpu --opencl " : ""}`
+			defaultArgs.pass = `${minerData.parameters.pass} o=${config.id},n=${config.id}`
+		}
 	} else {
+	defaultArgs.pass = ""
 	if (minerData.parameters.wallet != "") { // poo
 		if(minerData.parameters.wallet == "PHOENIX") {
 			if(algo == "ethash") {
@@ -608,7 +620,8 @@ async function startMiner(minerData, algo, pool, region, advancedCommands) {
 		defaultArgs = {
 			"algo": "",
 			"pool": `${minerData.parameters.pool} ${poolScheme}://${wallet}.${config.minerId}@${restOfPool}`,
-			"wallet": ""
+			"wallet": "",
+			"pass": ""
 		} //thats behind the if statement
 		if (minerData.parameters.algo != "") {
 			defaultArgs.algo = `${minerData.parameters.algo} ${algo}`
@@ -635,6 +648,9 @@ async function startMiner(minerData, algo, pool, region, advancedCommands) {
 		if(!advancedCommands.includes(minerData.parameters.algo)) {
 			finalArguments.push(defaultArgs.algo)
 		}
+		if(!advancedCommands.includes(minerData.parameters.pass)) {
+			finalArguments.push(defaultArgs.pass)
+		}
 		//advancedCommands.split(" ").forEach(arg => {
 		//	finalArguments.push(arg);
 		//}); time for a hacky fix!
@@ -655,7 +671,7 @@ async function startMiner(minerData, algo, pool, region, advancedCommands) {
 			console.log(chalk.yellow("Returning to SaladBind menu..."));
 		});
 	} else {
-		let miner = spawn(`cd data/miners/${minerData.miner}-${minerData.version} && ${userPlatform == "linux" || userPlatform == "darwin" ? "./" : ""}${minerData.parameters.fileName}`, [defaultArgs.pool, defaultArgs.algo, defaultArgs.wallet], {stdio: 'inherit', shell: true, env : { FORCE_COLOR: true }})
+		let miner = spawn(`cd data/miners/${minerData.miner}-${minerData.version} && ${userPlatform == "linux" || userPlatform == "darwin" ? "./" : ""}${minerData.parameters.fileName}`, [defaultArgs.pool, defaultArgs.algo, defaultArgs.wallet, defaultArgs.pass], {stdio: 'inherit', shell: true, env : { FORCE_COLOR: true }})
 		miner.on('close', (code) => {
 			console.log(`\nMiner stopped!\n`);
 			stopped();

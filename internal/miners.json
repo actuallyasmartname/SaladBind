@@ -35,7 +35,7 @@
                 "algo": "",
                 "wallet": "PHOENIX",
                 "pool": "-pool",
-                "password": "-pass"
+                "pass": "-pass"
             }
         },
         "trex": {
