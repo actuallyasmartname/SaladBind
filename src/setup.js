@@ -99,17 +99,32 @@ In order for this to work, you'll need to have the Discord desktop app installed
 				return;
 			}
 			const rigIDRegex = /^NiceHash rig ID: [a-z0-9]{15}$/m;
+			const idRegex = /o=[a-z0-9]{8}\-[a-z0-9]{4}\-[a-z0-9]{4}\-[a-z0-9]{4}\-[a-z0-9]{12}/
 			let rigID = logFileContent.match(rigIDRegex);
 			if (rigID) rigID = rigID.join(" ");
 			if (rigID) rigID = rigID.split(": ")[1];
-			return rigID;
+			let id = logFileContent.match(idRegex);
+			if (id) id = id.split("=")[1];
+			return {rigID, id};
 		}
 		let spinner = ora("Searching...").start();
-		let rigID = getIDFromLogs("main.log") ?? getIDFromLogs("main.old.log")
+		let idJSON = getIDFromLogs("main.log") ?? getIDFromLogs("main.old.log")
+		let rigID = idJSON.rigID;
+		let id = idJSON.id;
 		if (!rigID) {
-			console.log(chalk.bold.red("Could not find your Rig ID! Please make sure that you have mined for at least 5 minutes using Salad's official application."));
+			spinner.fail()
+			console.log(chalk.bold.red("Could not find your Rig ID! Please make sure that you have mined for at least 5 minutes using Salad's official application after restarting it."));
 			setTimeout(() => {
 				continueSetup()
+			}, 3500);
+			return;
+		}
+		if (!id) {
+			spinner.fail()
+			console.log(chalk.bold.red("Could not find your id for Prohashing! Use Automatic (Auth Token) method or manual instead.\n If you don't want to use the Prohashing pool, leave the Prohashing id space empty using the manual method"));
+			setTimeout(() => {
+				continueSetup()
+		
 			}, 3500);
 			return;
 		}
@@ -119,7 +134,7 @@ In order for this to work, you'll need to have the Discord desktop app installed
 		if (!fs.existsSync("./data")) {
 			fs.mkdirSync("./data");
 		}
-		fs.writeFileSync("./data/config.json", JSON.stringify({ "minerId": rigID, "discordPresence": isPresenceEnabled }));
+		fs.writeFileSync("./data/config.json", JSON.stringify({"id":id, "minerId": rigID, "discordPresence": isPresenceEnabled }));
 		spinner.succeed();
 		console.log(chalk.bold.greenBright(`That's all there is to it!`))
 		console.log(`You're done - you can now start using SaladBind!\nStarting in 5 seconds...`)
@@ -129,7 +144,7 @@ In order for this to work, you'll need to have the Discord desktop app installed
 		}, 5000);
 	} else if (promptResult.useapi == "api") {
 		//auth
-		console.log(chalk.green("We need the token to get your Wallet and Rig ID automatically.\nThey will not be stored!\n\nIf you do not know how to find your sAccess Token / Salad Authentication token please read this:\nhttps://bit.ly/saladbindconfig (copy this to read it)"))
+		console.log(chalk.green("We need the token to get your Wallet and Rig ID, along with the id for Prohashing automatically.\nThey will not be stored!\n\nIf you do not know how to find your sAccess Token / Salad Authentication token please read this:\nhttps://bit.ly/saladbindconfig (copy this to read it)"))
 		const auth = await inquirer.prompt([{
 			type: 'input',
 			name: 'auth',
@@ -181,6 +196,19 @@ In order for this to work, you'll need to have the Discord desktop app installed
 				return `If you don't want to manually enter your Worker ID, type "${chalk.yellowBright("cancel")}" and select an automatic mode. ${chalk.yellow.bold("You may be seeing this if you entered the Worker ID incorrectly!")}`;
 			}
 		}]);
+		console.log(`You need to find a line similar to this in your logs: PhoenixMiner.exe -pool stratum+tcp://prohashing.com:3339 -wal salad -pass o=${chalk.red("e1660ed0-987f-43da-b973-840364455d94")},n=e1660ed0-987f-43da-b973-840364455d94`)
+		console.log(`Copy the part shown in red from ${chalk.bold("your")} logs. \n If you do not wish to use Prohashing, you can leave this empty`)
+		const idPrompt = await inquirer.prompt([{
+			type: 'input',
+			name: 'id',
+			message: 'What is your Salad ID for Prohashing?',
+			validate: function(input) {
+				if (input.length == 0 || input == "cancel" || input.match(/[a-z0-9]{8}\-[a-z0-9]{4}\-[a-z0-9]{4}\-[a-z0-9]{4}\-[a-z0-9]{12}/)) {
+					return true;
+				}
+				return `If you don't want to manually enter your Worker ID, type "${chalk.yellowBright("cancel")}" and select an automatic mode. ${chalk.yellow.bold("You may be seeing this if you entered the Worker ID incorrectly!")}`;
+			}
+		}]);
 		if(worker.id == "cancel") {
 			return await continueSetup(true);
 		}
@@ -188,7 +216,7 @@ In order for this to work, you'll need to have the Discord desktop app installed
 		if (!fs.existsSync("./data")) {
 			fs.mkdirSync("./data");
 		}
-		fs.writeFileSync("./data/config.json", JSON.stringify({ "minerId": worker.id, "discordPresence": isPresenceEnabled }));
+		fs.writeFileSync("./data/config.json", JSON.stringify({ "id":idPrompt.id, "minerId": worker.id, "discordPresence": isPresenceEnabled }));
 		spinner.stop();
 		console.clear();
 		console.log(chalk.bold.greenBright(`That's all there is to it!`))
