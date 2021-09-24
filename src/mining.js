@@ -576,7 +576,7 @@ async function startMiner(minerData, algo, pool, region, advancedCommands) {
 			} else if(algo == "etchash") {
 				defaultArgs.wallet = `-wal ${wallet}`
 				defaultArgs.algo = `-coin etc`
-				defaultArgs.pass = `o=${config.id},n=${config.id}`
+				defaultArgs.pass = `-pass o=${config.id},n=${config.id}`
 				defaultArgs.pool = `${minerData.parameters.pool} ${pool.algos[algo].host.replace("REGION", region)}${minerData.miner == "PhoenixMiner" && hasAMD ? " -clKernel 0 " : ""}${minerData.miner == "lolMiner" ? " --pers BgoldPoW " : ""}`
 			}
 		} else {
