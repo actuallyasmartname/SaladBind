@@ -9,6 +9,11 @@
 
 ## Pools
 
+### Prohashing
+
+Overall recommended if supported by your miner and algorithm. Stable earnings and quick updates.
+Currently experimental but recommended to be used over others.
+
 ### NiceHash
 
 Good if you know you're going to be restarting the miner constantly instead of having long mining sessions. Has more stable earnings.
