@@ -58,6 +58,7 @@ In order for this to work, you'll need to have the Discord desktop app installed
 		}
 	});
 	
+	console.clear();
 	if(firstTime) {
 		console.clear();
 		console.log(chalk.greenBright.bold("Welcome to SaladBind!"));
@@ -82,6 +83,7 @@ In order for this to work, you'll need to have the Discord desktop app installed
 		]
 	}]);
 	if (promptResult.useapi == "auto") {
+		console.clear();
 		function getIDFromLogs(filename) {
 			let logPath;
 			if (process.platform == "win32") {
@@ -121,12 +123,21 @@ In order for this to work, you'll need to have the Discord desktop app installed
 		}
 		if (!id) {
 			spinner.fail()
-			console.log(chalk.bold.red("Could not find your id for Prohashing! Use Automatic (Auth Token) method or manual instead.\n If you don't want to use the Prohashing pool, leave the Prohashing id space empty using the manual method"));
-			setTimeout(() => {
-				continueSetup()
-		
-			}, 3500);
-			return;
+			console.log(chalk.bold.red("Could not find your id for Prohashing! You can use the Automatic (Auth Token) method or manual instead."));
+			let skipProhashing = await inquirer.prompt([{
+				type: 'confirm',
+				name: 'skipProhashing',
+				message: `Continue without the id for Prohashing? ${chalk.yellow.bold("If you continue without the id for Prohashing, you cannot use the Prohashing pool which has several advantages.")}`,
+				default: false
+			}]).then(function(answers) {
+				if (!answers.skipProhashing) {
+					setTimeout(() => {
+						continueSetup()
+					}, 3500);
+					return;
+				}
+				id = ""
+			});
 		}
 
 		spinner.succeed();
@@ -143,6 +154,7 @@ In order for this to work, you'll need to have the Discord desktop app installed
 			require("./index").menu();
 		}, 5000);
 	} else if (promptResult.useapi == "api") {
+		console.clear();
 		//auth
 		console.log(chalk.green("We need the token to get your Wallet and Rig ID, along with the id for Prohashing automatically.\nThey will not be stored!\n\nIf you do not know how to find your sAccess Token / Salad Authentication token please read this:\nhttps://bit.ly/saladbindconfig (copy this to read it)"))
 		const auth = await inquirer.prompt([{
@@ -180,6 +192,7 @@ In order for this to work, you'll need to have the Discord desktop app installed
 			console.log(chalk.bold.red("Failed to get your Rig ID! Please contact support on our Discord server (https://discord.gg/HfBAtQ2afz) and attach an image of the data above."));
 		}
 	} else {
+		console.clear();
 		if(firstTime) {
 			console.clear();
 			console.log(chalk.greenBright.bold("Welcome to SaladBind!"));
@@ -196,6 +209,7 @@ In order for this to work, you'll need to have the Discord desktop app installed
 				return `If you don't want to manually enter your Worker ID, type "${chalk.yellowBright("cancel")}" and select an automatic mode. ${chalk.yellow.bold("You may be seeing this if you entered the Worker ID incorrectly!")}`;
 			}
 		}]);
+		console.clear();
 		console.log(`You need to find a line similar to this in your logs: PhoenixMiner.exe -pool stratum+tcp://prohashing.com:3339 -wal salad -pass o=${chalk.red("e1660ed0-987f-43da-b973-840364455d94")},n=e1660ed0-987f-43da-b973-840364455d94`)
 		console.log(`Copy the part shown in red from ${chalk.bold("your")} logs. \n If you do not wish to use Prohashing, you can leave this empty`)
 		const idPrompt = await inquirer.prompt([{

@@ -291,9 +291,9 @@ async function selectPool(minerData, algo) {
 			for (let i = 0; i < Object.keys(poolData).length; i++) {
 				let pooly = poolData[Object.keys(poolData)[i]];
 				if (Object.keys(pooly.algos).includes(algo)) {
-					if (minerData.miner != "Ethminer") {
+					if(pooly.name != "Prohashing") {		
 						poolList.push({ name: pooly.name, value: pooly });
-					} else if (pooly.name == "Ethermine") {
+					} else if(config.id && config.id.length > 1) {
 						poolList.push({ name: pooly.name, value: pooly });
 					}
 				}
