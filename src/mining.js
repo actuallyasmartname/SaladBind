@@ -298,7 +298,7 @@ async function selectPool(minerData, algo) {
 					}
 				}
 			}
-			let pool;
+			var pool;
 			if (poolList.length > 1) {
 				console.log(`Don't know which one to pick? Read ${chalk.bold(`MINERS.md`)} on github!`)
 				pool = await inquirer.prompt({
@@ -317,7 +317,7 @@ async function selectPool(minerData, algo) {
 				regionList.push({ name: poolsy.regions[i], value: poolsy.regions[i] });
 			}
 			var region
-			if(pool.pool.name == "NiceHash") {
+			if(poolsy.name == "NiceHash") {
 				region = await inquirer.prompt({
 					type: "list",
 					name: "region",
