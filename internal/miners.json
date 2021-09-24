@@ -155,7 +155,7 @@
                 "algo": "--algo",
                 "wallet": "--user",
                 "pool": "--pool",
-                "pass": "-pass"
+                "pass": "--pass"
             }
         },
         "xmrig": {
