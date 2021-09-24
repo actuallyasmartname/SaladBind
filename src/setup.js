@@ -131,9 +131,7 @@ In order for this to work, you'll need to have the Discord desktop app installed
 				default: false
 			}]).then(function(answers) {
 				if (!answers.skipProhashing) {
-					setTimeout(() => {
-						continueSetup()
-					}, 3500);
+					continueSetup()
 					return;
 				}
 				id = "" // I dont think this is needed but its here for my sanity.
