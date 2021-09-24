@@ -101,7 +101,8 @@ To get your access token follow these steps:
 Copy the part after `o=` until the `,n=` as demonstrated here: `006a68e5-c33c-40f0-9531-fb216829612f`
 7. Paste the Prohashing id into the terminal (on Windows, right-click in the SaladBind window to paste)
 
-**If you dont want to use the Prohashing pool, you can skip steps 6 & 7.**<br>
+**If you dont want to use the Prohashing pool, you can skip steps 6 & 7**<br>
+However using the Prohashing pool is recommended when possible.
 
 
 You are now ready to go!
