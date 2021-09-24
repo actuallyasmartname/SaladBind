@@ -566,6 +566,19 @@ async function startMiner(minerData, algo, pool, region, advancedCommands) {
 	if(minerData.miner == "TeamRedMiner" && pool.name == "Ethermine") {
 		pool.algos[algo].host = pool.algos[algo].host.replace("ethproxy+ssl", "stratum+ssl");
 	}
+	if(pool.name == "Prohashing") {
+		if(minerData.parameters.wallet == "PHOENIX") {
+			if(algo == "ethash") {
+				defaultArgs.wallet = `-wal ${wallet}`
+				defaultArgs.algo = `-coin eth`
+				defaultArgs.pass = ``
+				defaultArgs.pool = `${minerData.parameters.pool} ${pool.algos[algo].host.replace("REGION", region)}${minerData.miner == "PhoenixMiner" && hasAMD ? " -clKernel 0 " : ""}${minerData.miner == "lolMiner" ? " --pers BgoldPoW " : ""}`
+			} else if(algo == "etchash") {
+				defaultArgs.wallet = `-wal ${wallet}.${config.minerId}`
+				defaultArgs.algo = `-coin etc`
+				defaultArgs.pool = `${minerData.parameters.pool} ${pool.algos[algo].host.replace("REGION", region)}${minerData.miner == "PhoenixMiner" && hasAMD ? " -clKernel 0 " : ""}${minerData.miner == "lolMiner" ? " --pers BgoldPoW " : ""}`
+			}
+	} else {
 	if (minerData.parameters.wallet != "") { // poo
 		if(minerData.parameters.wallet == "PHOENIX") {
 			if(algo == "ethash") {
@@ -601,6 +614,7 @@ async function startMiner(minerData, algo, pool, region, advancedCommands) {
 			defaultArgs.algo = `${minerData.parameters.algo} ${algo}`
 		}
 	}
+}
 	let timeStarted = Date.now();
 	function stopped() {
 		let currentTime = Date.now();
