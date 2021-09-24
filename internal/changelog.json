@@ -10,5 +10,9 @@
         "Several improvements to the UI",
         "Minor bug fixes",
         "Fixed a bug where XMRig would break on CPU-only machines."
+    ],
+    "next_version": "1.5.0",
+    "next_changelog": [
+        "Added support for the Prohashing pool"
     ]
 }
