@@ -41,8 +41,8 @@
         "trex": {
             "miner": "T-Rex",
             "download": {
-                "win32": "https://github.com/trexminer/T-Rex/releases/download/0.23.1/t-rex-0.23.1-win.zip",
-                "linux": "https://github.com/trexminer/T-Rex/releases/download/0.23.1/t-rex-0.23.1-linux.tar.gz"
+                "win32": "https://github.com/trexminer/T-Rex/releases/download/0.23.2/t-rex-0.23.2-win.zip",
+                "linux": "https://github.com/trexminer/T-Rex/releases/download/0.23.2/t-rex-0.23.2-linux.tar.gz"
             },
             "algos": [
                 "ethash",
@@ -59,7 +59,7 @@
                 "linux"
             ],
             "fee": 1,
-            "version": "0.23.1",
+            "version": "0.23.2",
             "parameters": {
                 "fileName": "t-rex",
                 "algo": "-a",
@@ -161,9 +161,9 @@
         "xmrig": {
             "miner": "XMRig",
             "download": {
-                "win32": "https://github.com/xmrig/xmrig/releases/download/v6.15.0/xmrig-6.15.0-gcc-win64.zip",
-                "linux": "https://github.com/xmrig/xmrig/releases/download/v6.15.0/xmrig-6.15.0-linux-x64.tar.gz",
-                "darwin": "https://github.com/xmrig/xmrig/releases/download/v6.15.0/xmrig-6.15.0-macos-x64.tar.gz"
+                "win32": "https://github.com/xmrig/xmrig/releases/download/v6.15.1/xmrig-6.15.1-gcc-win64.zip",
+                "linux": "https://github.com/xmrig/xmrig/releases/download/v6.15.1/xmrig-6.15.1-linux-x64.tar.gz",
+                "darwin": "https://github.com/xmrig/xmrig/releases/download/v6.15.1/xmrig-6.15.1-macos-x64.tar.gz"
             },
             "algos": [
                 "randomx"
@@ -176,7 +176,7 @@
                 "darwin"
             ],
             "fee": 1,
-            "version": "6.15.0",
+            "version": "6.15.1",
             "parameters": {
                 "fileName": "xmrig",
                 "algo": "-a",
