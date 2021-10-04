@@ -639,7 +639,7 @@ async function startMiner(minerData, algo, pool, region, advancedCommands) {
 		// i turned them into a string, it's because of inquirer remember, like when we have to do pool.pool
 		// *****user has set advanced commands*****					ok then???
 		let finalArguments = []
-		console.log(advancedCommands, minerData.parameters.pass)
+		//console.log(advancedCommands, minerData.parameters.pass)
 		if(!advancedCommands.includes(minerData.parameters.pool)) {
 			finalArguments.push(defaultArgs.pool)
 		}
