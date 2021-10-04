@@ -106,7 +106,7 @@ In order for this to work, you'll need to have the Discord desktop app installed
 			if (rigID) rigID = rigID.join(" ");
 			if (rigID) rigID = rigID.split(": ")[1];
 			let id = logFileContent.match(idRegex);
-			if (id) id = id.split("=")[1];
+			if (id) id = id[0].split("=")[1];
 			return {rigID, id};
 		}
 		let spinner = ora("Searching...").start();
