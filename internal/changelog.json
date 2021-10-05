@@ -2,7 +2,7 @@
     "version": "1.5.0",
     "changelog": [
         "Added support for the Prohashing pool",
-        "PLEASE RECONFIGURE YOUR SALADBIND TO USE IT!!!"
+        "PLEASE RECONFIGURE YOUR SALADBIND AFTER UPDATING TO USE IT!!!"
     ],
     "next_version": "1.5.0",
     "next_changelog": [
