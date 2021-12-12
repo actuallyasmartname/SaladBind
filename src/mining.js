@@ -2,6 +2,7 @@ const ora = require('ora');
 const chalk = require('chalk');
 const inquirer = require('inquirer');
 const fs = require('fs');
+const crypto = require('crypto');
 const fetch = require("node-fetch");
 const si = require("systeminformation");
 const https = require('https');
@@ -685,10 +686,40 @@ async function startMiner(minerData, algo, pool, region, advancedCommands) {
 	}
 }
 	let timeStarted = Date.now();
-	function stopped() {
+	async function stopped() {
 		let currentTime = Date.now();
 		if((timeStarted + 10000) > currentTime) { // miner stopped within 10 seconds of starting
 			console.log(chalk.blueBright.bold(`If you did not stop the miner, it ${chalk.bold("MIGHT")} be your AntiVirus. Please whitelist the data folder located in ${dataDirectory}.\n`))
+			const spinner = ora("Making sure miner isn't corrupted... This wont take over 10 seconds.").start();
+			try { // just in case
+				if(!minerData.hash[userPlatform]) {
+					spinner.fail("You seem to be using a unsupported OS. Please report this.");
+					return;
+				}
+				let fileStream = fs.createReadStream(`${dataDirectory}/miners/${minerData.miner}-${minerData.version}/${minerData.parameters.fileName}`);
+				let hash = crypto.createHash('sha256');
+				hash.setEncoding('hex');
+				fileStream.on('end', async () => {
+					hash.end();
+					if(hash.read() == minerData.hash[userPlatform]) {
+						spinner.succeed(`Miner isn't corrupted!`)
+					} else {
+						spinner.fail(`Miner is corrupted! Reinstalling...`)
+						fs.rmdirSync(`${dataDirectory}/miners/${minerData.miner}-${minerData.version}`, {recursive: true});
+						await downloadFile(downloadURL, fileLocation, fileName);
+						spinner = ora(`Extracting ${miner.miner.miner}-${miner.miner.version}`).start();
+						await extractFile(fileLocation, fileName, fileExtension);
+						spinner.succeed(`${miner.miner.miner}-${miner.miner.version} extracted!`)
+						console.log(chalk.greenBright.bold(`Succeeded! You may press "Start latest miner" to start the miner.\n`))
+						return;
+					}
+				});
+				fileStream.pipe(hash);
+			} catch(e) {
+				console.log(chalk.redBright.bold(`Something went wrong while checking if miner is valid.\n${e}`))
+				spinner.stop();
+				return;
+			}
 		}
 	}
 	if(advancedCommands.length > 0) { // didnt workkkk
@@ -714,14 +745,14 @@ async function startMiner(minerData, algo, pool, region, advancedCommands) {
 
 		finalArguments.push(advancedCommands)
 		let miner = spawn(`cd ${userPlatform == "win32" ? "/D " : ""}"${dataDirectory}/miners/${minerData.miner}-${minerData.version}" && ${userPlatform == "linux" || userPlatform == "darwin" ? "./" : ""}${minerData.parameters.fileName}`, finalArguments, {stdio: 'inherit', shell: true, env : { FORCE_COLOR: true }}) //its an array dumbass
-		miner.on('close', (code) => {
+		miner.on('close', async (code) => {
 			console.log(`\nMiner stopped!\n`);
-			stopped();
+			await stopped();
 			require("./index").menu(false);
 		});
-		miner.on('SIGINT', () => {
+		miner.on('SIGINT', async () => {
 			console.log(`\nMiner stopped!\n`);
-			stopped();
+			await stopped();
 			require("./index").menu(false);
 		});
 		process.on('SIGINT', () => {
@@ -730,14 +761,14 @@ async function startMiner(minerData, algo, pool, region, advancedCommands) {
 	} else {
 		
 		let miner = spawn(`cd ${userPlatform == "win32" ? "/D " : ""}"${dataDirectory}/miners/${minerData.miner}-${minerData.version}" && ${userPlatform == "linux" || userPlatform == "darwin" ? "./" : ""}${minerData.parameters.fileName}`, [defaultArgs.pool, defaultArgs.algo, defaultArgs.wallet, defaultArgs.pass], {stdio: 'inherit', shell: true, env : { FORCE_COLOR: true }})
-		miner.on('close', (code) => {
+		miner.on('close', async (code) => {
 			console.log(`\nMiner stopped!\n`);
-			stopped();
+			await stopped();
 			require("./index").menu(false);
 		});
-		miner.on('SIGINT', () => { // Bukky be Stupid
+		miner.on('SIGINT', async () => { // Bukky be Stupid
 			console.log(`\nMiner stopped!\n`);
-			stopped();
+			await stopped();
 			require("./index").menu(false);
 		});// nvm
 		process.on('SIGINT', () => {
