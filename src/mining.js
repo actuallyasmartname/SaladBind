@@ -21,6 +21,7 @@ const cache = require("./getMachine.js"); // wtf how is this cache haha
 let spinner;
 let isDev = config.dev != undefined && config.dev == true;
 let lastMiner = {}
+let userPlatform;
 
 function moveDupeFolder(folderName) {
 	let folderData = fs.readdirSync(`${dataDirectory}/temp/${folderName}`)
@@ -130,7 +131,7 @@ async function continueMiner() {
 			let minerList = [];
 			let temp = systemCache.os
 			let temp2 = systemCache.graphics
-			let userPlatform = temp.platform;
+			userPlatform = temp.platform;
 			if(userPlatform == "Windows") userPlatform = "win32";
 			let GPUs = [];
 			for (let i = 0; i < temp2.controllers.length; i++) {
@@ -687,30 +688,39 @@ async function startMiner(minerData, algo, pool, region, advancedCommands) {
 }
 	let timeStarted = Date.now();
 	async function stopped() {
+		let x = new Promise((resolve)=>{
 		let currentTime = Date.now();
 		if((timeStarted + 10000) > currentTime) { // miner stopped within 10 seconds of starting
 			console.log(chalk.blueBright.bold(`If you did not stop the miner, it ${chalk.bold("MIGHT")} be your AntiVirus. Please whitelist the data folder located in ${dataDirectory}.\n`))
-			const spinner = ora("Making sure miner isn't corrupted... This wont take over 10 seconds.").start();
+			let spinner = ora("Making sure miner isn't corrupted... This wont take over 10 seconds.").start();
 			try { // just in case
+				}
 				if(!minerData.hash[userPlatform]) {
 					spinner.fail("You seem to be using a unsupported OS. Please report this.");
+					resolve();
 					return;
 				}
-				let fileStream = fs.createReadStream(`${dataDirectory}/miners/${minerData.miner}-${minerData.version}/${minerData.parameters.fileName}`);
+				let fileStream = fs.createReadStream(`${dataDirectory}/miners/${minerData.miner}-${minerData.version}/${minerData.parameters.fileName}${userPlatform == "win32"? ".exe":""}`);
 				let hash = crypto.createHash('sha256');
 				hash.setEncoding('hex');
 				fileStream.on('end', async () => {
 					hash.end();
 					if(hash.read() == minerData.hash[userPlatform]) {
 						spinner.succeed(`Miner isn't corrupted!`)
+						resolve();
 					} else {
 						spinner.fail(`Miner is corrupted! Reinstalling...`)
 						fs.rmdirSync(`${dataDirectory}/miners/${minerData.miner}-${minerData.version}`, {recursive: true});
-						await downloadFile(downloadURL, fileLocation, fileName);
-						spinner = ora(`Extracting ${miner.miner.miner}-${miner.miner.version}`).start();
-						await extractFile(fileLocation, fileName, fileExtension);
-						spinner.succeed(`${miner.miner.miner}-${miner.miner.version} extracted!`)
+						var fileExtension = path.extname(minerData.download[userPlatform]); //time for a really hacky solution. this 
+						if (fileExtension == ".gz") {
+							fileExtension = ".tar.gz"
+						}
+						await downloadFile(minerData.download[userPlatform], `${dataDirectory}/temp/${minerData.parameters.fileName}${fileExtension}`, minerData.parameters.fileName);
+						spinner = ora(`Extracting ${minerData.miner}-${minerData.version}`).start();
+						await extractFile(`${dataDirectory}/temp/${minerData.parameters.fileName}${fileExtension}`, `${minerData.miner}-${minerData.version}`, fileExtension);
+						spinner.succeed(`${minerData.miner}-${minerData.version} extracted!`)
 						console.log(chalk.greenBright.bold(`Succeeded! You may press "Start latest miner" to start the miner.\n`))
+						resolve();
 						return;
 					}
 				});
@@ -718,9 +728,12 @@ async function startMiner(minerData, algo, pool, region, advancedCommands) {
 			} catch(e) {
 				console.log(chalk.redBright.bold(`Something went wrong while checking if miner is valid.\n${e}`))
 				spinner.stop();
+				resolve();
 				return;
 			}
 		}
+	})
+	await x.then(()=> {return})
 	}
 	if(advancedCommands.length > 0) { // didnt workkkk
 		// i turned them into a string, it's because of inquirer remember, like when we have to do pool.pool
