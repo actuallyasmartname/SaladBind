@@ -694,7 +694,6 @@ async function startMiner(minerData, algo, pool, region, advancedCommands) {
 			console.log(chalk.blueBright.bold(`If you did not stop the miner, it ${chalk.bold("MIGHT")} be your AntiVirus. Please whitelist the data folder located in ${dataDirectory}.\n`))
 			let spinner = ora("Making sure miner isn't corrupted... This wont take over 10 seconds.").start();
 			try { // just in case
-				}
 				if(!minerData.hash[userPlatform]) {
 					spinner.fail("You seem to be using a unsupported OS. Please report this.");
 					resolve();
