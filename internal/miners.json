@@ -17,7 +17,7 @@
                 "linux": "https://phoenixminer.info/downloads/PhoenixMiner_5.9d_Linux.tar.gz"
             },
             "algos": [
-                "ethash",
+                "ethash (recommended)",
                 "etchash"
             ],
             "supported_gpus": [
